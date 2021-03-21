@@ -10,6 +10,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.io.Resource;
@@ -18,6 +20,10 @@ import com.anna.peopleinfoui.ClientsApplication.StageReadyEvent;
 import com.anna.peopleinfoui.*;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.Scanner;
 
 @Component
 public class StageInitializer implements ApplicationListener<StageReadyEvent>{
@@ -35,17 +41,40 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent>{
 
     private ObservableList<Person> personData = FXCollections.observableArrayList();
     private String applicationTitle;
+    private String apiURL = "http://localhost:8080/api/persons";
 
     public ObservableList<Person> getPersonData() {
         return personData;
     }
 
-    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle) {
+    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle) throws IOException {
         this.applicationTitle = applicationTitle;
-        for (int i=0; i < 25;i++){
-            personData.add(new Person("Name " + i ,"Last name " + i*2));
+        fetchPeople(apiURL);
+    }
+
+    public void fetchPeople(String request) throws IOException {
+        URL url = new URL(request);
+        Scanner input = new Scanner((InputStream) url.getContent());
+        String result = "";
+        while (input.hasNext()) {
+            result += input.nextLine();
+        }
+        JSONArray jsonArray = new JSONArray(result);
+        for (int i = 0; i < jsonArray.length(); i++){
+            JSONObject person = jsonArray.getJSONObject(i);
+            Long id = person.getLong("id");
+            String firstName = person.getString("firstName");
+            String lastName = person.getString("lastName");
+            String city = person.getString("city");
+            String street = person.getString("street");
+            Integer postalCode = person.getInt("postalCode");
+            LocalDate birthday = DateUtil.parse(person.getString("birthday"));
+            personData.add(new Person(
+                    id, firstName, lastName, city, street, postalCode, birthday
+            ));
         }
     }
+
 
     @Override
     public void onApplicationEvent(StageReadyEvent stageReadyEvent) {

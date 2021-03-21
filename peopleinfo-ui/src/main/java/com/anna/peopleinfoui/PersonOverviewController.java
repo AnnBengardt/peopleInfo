@@ -4,7 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import com.anna.peopleinfoui.*;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class PersonOverviewController {
+    private String apiURL = "http://localhost:8080/api/persons";
+
     @FXML
     private TableView<Person> personTableView;
 
@@ -55,9 +61,10 @@ public class PersonOverviewController {
     }
 
     @FXML
-    private void handleDeletePerson(){
+    private void handleDeletePerson() throws IOException {
         int selectedIndex = personTableView.getSelectionModel().getSelectedIndex();
         if(selectedIndex>=0){
+            deletePerson(apiURL, personTableView.getSelectionModel().getSelectedItem().getId());
             personTableView.getItems().remove(selectedIndex);
         }else{
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -68,6 +75,15 @@ public class PersonOverviewController {
 
             alert.showAndWait();
         }
+    }
+
+    private void deletePerson(String request, Long id) throws IOException {
+        URL url = new URL(request + "/" + id.toString());
+        System.out.println(url);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("DELETE");
+        urlConnection.connect();
+        System.out.println(urlConnection.getResponseCode());
     }
 
     private void showPersonDetails(Person person){

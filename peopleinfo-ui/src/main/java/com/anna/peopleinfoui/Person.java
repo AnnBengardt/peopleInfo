@@ -2,9 +2,11 @@ package com.anna.peopleinfoui;
 
 import javafx.beans.property.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Person {
+    private final LongProperty id;
     private final StringProperty firstName;
     private final StringProperty lastName;
     private final StringProperty street;
@@ -13,18 +15,20 @@ public class Person {
     private final ObjectProperty<LocalDate> birthday;
 
     public Person(){
-        this(null, null);
+        this(null, null, null, null, null, null, null);
     }
-    public Person(String firstName, String lastName){
+    public Person(Long id, String firstName, String lastName, String city, String street, Integer postalCode, LocalDate birthday){
+        this.id = new SimpleLongProperty(id);
         this.firstName = new SimpleStringProperty(firstName);
         this.lastName = new SimpleStringProperty(lastName);
 
-        this.street = new SimpleStringProperty("Prospekt Mira");
-        this.city = new SimpleStringProperty("Moscow");
-        this.postalCode = new SimpleIntegerProperty(101067);
-        this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(2001, 01, 01));
+        this.street = new SimpleStringProperty(street);
+        this.city = new SimpleStringProperty(city);
+        this.postalCode = new SimpleIntegerProperty(postalCode);
+        this.birthday = new SimpleObjectProperty<LocalDate>(birthday);
     }
 
+    public long getId() { return id.get(); }
 
     public String getFirstName() {
         return firstName.get();
