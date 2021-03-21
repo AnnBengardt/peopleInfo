@@ -1,0 +1,111 @@
+.background {
+    -fx-background-color: #FFEBCD;
+}
+
+.label {
+    -fx-font-size: 13pt;
+    -fx-font-family: "Palatino Linotype";
+    -fx-text-fill: black;
+    -fx-opacity: 0.9;
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Palatino Linotype";
+    -fx-text-fill: black;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 32pt;
+    -fx-font-family: "Palatino Linotype";
+    -fx-text-fill: black;
+    -fx-opacity: 1;
+}
+
+.table-view {
+    -fx-base: #FFEBCD;
+    -fx-control-inner-background: #FFEBCD;
+    -fx-background-color: #FFEBCD;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color:
+            transparent
+            transparent
+            derive(-fx-base, 80%)
+            transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Palatino Linotype";
+    -fx-text-fill: black;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+.menu-bar {
+    -fx-background-color: derive(#FFEBCD,30%);
+}
+
+.context-menu {
+    -fx-background-color: derive(#FFEBCD,30%);
+}
+
+.menu-bar .label {
+    -fx-font-size: 16pt;
+    -fx-font-family: "Palatino Linotype";
+    -fx-text-fill: black;
+    -fx-opacity: 0.9;
+}
+
+.menu .left-container {
+    -fx-background-color: black;
+}
+
+.text-field {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Palatino Linotype";
+}
+
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #000000;
+    -fx-border-width: 1;
+    -fx-background-radius: 0;
+    -fx-background-color: #FFE4C4;
+    -fx-font-family: "Palatino Linotype", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #000000;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button:hover {
+    -fx-background-color: #FFF8DC;
+}
+
+.button:pressed, .button:default:hover:pressed {
+    -fx-background-color: red;
+    -fx-text-fill: #FFEBCD;
+}
+
+.button:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
