@@ -3,10 +3,17 @@ package com.anna.peopleinfoui;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import com.anna.peopleinfoui.*;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.boot.json.JsonParser;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 public class PersonOverviewController {
     private String apiURL = "http://localhost:8080/api/persons";
@@ -107,21 +114,39 @@ public class PersonOverviewController {
     }
 
     @FXML
-    private void handleNewPerson(){
+    private void handleNewPerson() throws IOException {
         Person tempPerson = new Person();
         boolean isOkClicked = mainApp.showPersonEditPage(tempPerson);
         if (isOkClicked){
             mainApp.getPersonData().add(tempPerson);
+            createPerson(apiURL, tempPerson);
         }
     }
 
+    private void createPerson(String request, Person tempPerson) throws IOException {
+        URL url = new URL(request);
+        System.out.println(url);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("POST");
+        urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
+        urlConnection.setRequestProperty("Accept", "application/json");
+        urlConnection.setDoOutput(true);
+        System.out.println(tempPerson.toString());
+        JSONObject jsonObject = new JSONObject(tempPerson.toString());
+        OutputStream outputStream = urlConnection.getOutputStream();
+        outputStream.write(jsonObject.toString().getBytes("UTF-8"));
+        outputStream.close();
+        System.out.println(urlConnection.getResponseCode());
+    }
+
     @FXML
-    private void handleEditPerson(){
+    private void handleEditPerson() throws IOException {
         Person selectedPerson = personTableView.getSelectionModel().getSelectedItem();
         if(selectedPerson != null){
             boolean isOkClicked = mainApp.showPersonEditPage(selectedPerson);
             if(isOkClicked){
                 showPersonDetails(selectedPerson);
+                editPerson(apiURL, selectedPerson);
             }
         }else{
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -132,6 +157,22 @@ public class PersonOverviewController {
 
             alert.showAndWait();
         }
+    }
+
+    private void editPerson(String request, Person selectedPerson) throws IOException {
+        URL url = new URL(request + "/" + selectedPerson.getId());
+        System.out.println(url);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("PUT");
+        urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
+        urlConnection.setRequestProperty("Accept", "application/json");
+        urlConnection.setDoOutput(true);
+        System.out.println(selectedPerson.toString());
+        JSONObject jsonObject = new JSONObject(selectedPerson.toString());
+        OutputStream outputStream = urlConnection.getOutputStream();
+        outputStream.write(jsonObject.toString().getBytes("UTF-8"));
+        outputStream.close();
+        System.out.println(urlConnection.getResponseCode());
     }
 
 

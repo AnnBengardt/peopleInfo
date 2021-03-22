@@ -15,7 +15,7 @@ public class Person {
     private final ObjectProperty<LocalDate> birthday;
 
     public Person(){
-        this(null, null, null, null, null, null, null);
+        this(Long.valueOf(1), null, null, null, null, 0, null);
     }
     public Person(Long id, String firstName, String lastName, String city, String street, Integer postalCode, LocalDate birthday){
         this.id = new SimpleLongProperty(id);
@@ -79,6 +79,9 @@ public class Person {
         this.birthday.set(birthday);
     }
 
+    public void setId(Long id) {this.id.set(id);}
+
+    public LongProperty idProperty() { return id; }
 
     public StringProperty getFirstNameProperty() {
         return firstName;
@@ -102,5 +105,18 @@ public class Person {
 
     public ObjectProperty<LocalDate> getBirthdayProperty() {
         return birthday;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id : " + getId() + ",\n" +
+                "firstName : " + getFirstName() + ",\n" +
+                "lastName : " + getLastName() + ",\n" +
+                "street : " + getStreet() + ",\n" +
+                "city : " + getCity() + ",\n" +
+                "postalCode : " + getPostalCode() + ",\n" +
+                "birthday : " + getBirthday() + ",\n" +
+                '}';
     }
 }
